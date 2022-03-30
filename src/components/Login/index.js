@@ -1,16 +1,39 @@
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import styled from 'styled-components';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 import logo from '../../assets/logo-trackit.png'
 
 export default function Login(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    function login(event){
+        event.preventDefault();
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+        const promise = axios.post(URL, {
+            email,
+            password
+        });
+
+        promise.then(response => {
+            const {data} = response;
+            console.log(data);
+            navigate('/hoje');
+        });
+
+        promise.catch(erro => alert('Houve um erro no Login! Erro: ' + erro.response.status))
+    }
+
     return(
         <LoginScreen>
             <img className='logo' src={logo} alt='TrackIt Logo' />
             <h1>TrackIt</h1>
-            <form>
-                <input type="email" placeholder='email' id="email" name="email" />
-                <input type="password" placeholder='senha' id="pass" name="password"  required />
+            <form onSubmit={login}  >
+                <input type="email" placeholder='email' value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <input type="password" placeholder='senha' value={password} onChange={(e) => setPassword(e.target.value)}  required />
                 <button type="submit">Entrar</button>
             </form>
             <Link to="/cadastro"><p>Não tem uma conta? Cadastre-se!</p></Link>
@@ -51,9 +74,10 @@ const LoginScreen = styled.section`
         margin-bottom: 6px;
         font-size: 20.976px;
         font-family: 'Lexend Deca', sans-serif;
+        padding: 10px;
     }
     input::placeholder{  
-        padding-left: 11px;
+        padding-left: 1px;
         color: #DBDBDB;
     }
 

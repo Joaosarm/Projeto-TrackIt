@@ -1,18 +1,45 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useState } from 'react';
+import axios from 'axios';
 
-import logo from '../../assets/logo-trackit.png'
+import logo from '../../assets/logo-trackit.png';
 
 export default function Register(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [image, setImage] = useState('');
+
+    const navigate = useNavigate();
+
+    function sendData(event){
+        event.preventDefault();
+        const  URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up';
+        const promise = axios.post(URL, {
+            email,
+	        name,
+	        image,
+	        password
+        });
+        promise.then(response => {
+            const {data} = response;
+            console.log(data);
+            navigate('/');
+        });
+        promise.catch(erro => alert('Houve um erro no Cadastro! Erro: ' + erro.response.status));
+
+    }
+
     return(
         <RegisterScreen>
             <img className='logo' src={logo} alt='TrackIt Logo' />
             <h1>TrackIt</h1>
-            <form>
-                <input type="email" placeholder='email' id="email" name="email" />
-                <input type="password" placeholder='senha' id="pass" name="password"  required />
-                <input type="text" placeholder='nome' id="name" name="name" />
-                <input type="url" placeholder='foto' id="image" name="image" />
+            <form onSubmit={sendData}  >
+                <input type="email" placeholder='email' value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <input type="password" placeholder='senha' value={password} onChange={(e) => setPassword(e.target.value)}  required />
+                <input type="text" placeholder='nome' value={name} onChange={(e) => setName(e.target.value)} required />
+                <input type="url" placeholder='foto' value={image} onChange={(e) => setImage(e.target.value)} required />
                 <button type="submit">Cadastrar</button>
             </form>
             <Link to="/"><p>Já tem uma conta? Faça login!</p></Link>
@@ -53,9 +80,10 @@ const RegisterScreen = styled.section`
         margin-bottom: 6px;
         font-size: 20.976px;
         font-family: 'Lexend Deca', sans-serif;
+        padding: 10px;
     }
     input::placeholder{  
-        padding-left: 11px;
+        padding-left: 1px;
         color: #DBDBDB;
     }
 
