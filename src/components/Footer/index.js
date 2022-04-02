@@ -11,7 +11,7 @@ export default function Footer(){
     )
 }
 
-const AppHeader = styled.header`
+const AppHeader = styled.footer`
     position: fixed;
     bottom: 0;
     left: 0;

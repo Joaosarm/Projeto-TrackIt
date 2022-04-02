@@ -1,13 +1,15 @@
 import styled from 'styled-components';
+import { useContext } from "react";
 
-import fota from '../../assets/fota.webp'
+import UserContext from "../../contexts/UserContext";
 
 
 export default function Header(){
+    const {image} = useContext(UserContext);
     return(
         <AppHeader>
             <h1>TrackIt</h1>
-            <img src={fota} alt='User'/>
+            <img src={image} alt='User'/>
         </AppHeader>
     )
 }

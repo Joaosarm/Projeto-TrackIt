@@ -1,14 +1,16 @@
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 
 import logo from '../../assets/logo-trackit.png'
+import UserContext from '../../contexts/UserContext';
 
 export default function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {setImage, setToken} = useContext(UserContext);
 
     function login(event){
         event.preventDefault();
@@ -20,7 +22,8 @@ export default function Login(){
 
         promise.then(response => {
             const {data} = response;
-            console.log(data);
+            setImage(data.image);
+            setToken(data.token);
             navigate('/hoje');
         });
 
