@@ -29,3 +29,18 @@ const AppHeader = styled.footer`
         text-decoration: none;
     }
 `
+
+
+
+{/* <CircularProgressbar
+        value={percentage}
+        text={`${percentage}%`}
+        background
+        backgroundPadding={6}
+        styles={buildStyles({
+          backgroundColor: "#3e98c7",
+          textColor: "#fff",
+          pathColor: "#fff",
+          trailColor: "transparent"
+        })}
+      /> */}

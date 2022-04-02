@@ -38,6 +38,7 @@ export default function HabitsScreen(){
                 return (
                 <Habit key = {id}>
                     <h3>{name}</h3>
+                    <ion-icon onClick={() => deleteHabit(id)} name="trash-outline"></ion-icon>
                     <Days>
                         {daysButton.map((day, index) => habitDays(day, index, days))}
                     </Days>
@@ -92,6 +93,21 @@ export default function HabitsScreen(){
             console.log('Deu Certo');
             setHabitName('');
             setAddNewHabit(false);
+        })
+        promise.catch(erro => console.log('Erro: ' + erro));
+    }
+
+    function deleteHabit(id){
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+        const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
+        const promise = axios.delete(URL, config);
+        promise.then(response => {
+            setHabitList([...habitList].filter(habit => habit.id !== id));
+            console.log('Deu Certo');
         })
         promise.catch(erro => console.log('Erro: ' + erro));
     }
@@ -250,5 +266,12 @@ const Habit = styled.article`
         color: #666666;
         margin-bottom: 6px;
         margin-top: 2px;
+    }
+    ion-icon{
+        position: absolute;
+        right: 10px;
+        top: 11px;
+        color: #666666;
+        font-size: 20px;
     }
 `
