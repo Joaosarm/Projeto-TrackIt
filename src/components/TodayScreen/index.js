@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useContext } from "react";
+import dayjs from "dayjs";
 
 import Header from "../Header";
 import Footer from "../Footer";
@@ -9,9 +10,14 @@ import { useState } from "react/cjs/react.development";
 
 export default function TodayScreen(){
     const {token} = useContext(UserContext);
+    const dateNumber = dayjs().format('DD/MM');
+    const dayNumber = dayjs().format('d');
+
+
     const [todayHabits, setTodayHabits] = useState([])
     const [color, setColor] = useState('#EBEBEB');
-    console.log('token = ' + color);
+    console.log(dayNumber);
+
 
     // function montarHabitos(){
     //     if(todayHabits.length> 0){
@@ -29,12 +35,33 @@ export default function TodayScreen(){
         }
     }
 
+    function dateName(){
+        switch(dayNumber){
+            case '0':
+                return 'Domingo';
+            case '1':
+                return 'Segunda';
+            case '2':
+                return 'Terça';
+            case '3':
+                return 'Quarta';
+            case '4':
+                return 'Quinta';
+            case '5':
+                return 'Sexta';
+            case '6':
+                return 'Sábado';
+            default:
+                return 'Inválido';
+        }
+    }
+
 
     return(
         <Today>
             <Header />
                 <Title color = '#BABABA' >
-                    <h2>DIA, 00/00</h2>
+                    <h2>{dateName()}, {dateNumber}</h2>
                     <h3>Nenhum hábito concluido</h3>
                 </Title>
                 <Habit color = {color}>
