@@ -29,6 +29,7 @@ const AppHeader = styled.header`
     justify-content: space-between;
     align-items: center;
     padding: 10px 18px;
+    z-index: 1;
 
     img{
         height: 51px;

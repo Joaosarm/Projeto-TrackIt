@@ -12,7 +12,6 @@ export default function HabitsScreen(){
     const daysButton = ['D','S','T','Q','Q','S','S','D'];
     const [selectedDays, setSelectedDays] = useState([]);
     const [habitName, setHabitName] = useState('');
-    console.log(habitList);
 
     const {token} = useContext(UserContext);
 
@@ -28,7 +27,7 @@ export default function HabitsScreen(){
             const {data} = response;
             setHabitList(data);
         })
-        promise.catch(erro => console.log('Erro: ' + erro));
+        promise.catch(erro => alert(erro));
     }, []);
 
     function showHabits(){
@@ -72,7 +71,6 @@ export default function HabitsScreen(){
         } else {
         const newSelected = selectedDays.filter(day => day !== index);
         setSelectedDays(newSelected);
-        console.log(newSelected);
         }
     }
 
@@ -90,11 +88,10 @@ export default function HabitsScreen(){
         promise.then(response => {
             const {data} = response;
             setHabitList([...habitList, data]);
-            console.log('Deu Certo');
             setHabitName('');
             setAddNewHabit(false);
         })
-        promise.catch(erro => console.log('Erro: ' + erro));
+        promise.catch(erro => alert(erro));
     }
 
     function deleteHabit(id){
@@ -104,12 +101,14 @@ export default function HabitsScreen(){
             }
         };
         const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
-        const promise = axios.delete(URL, config);
-        promise.then(response => {
-            setHabitList([...habitList].filter(habit => habit.id !== id));
-            console.log('Deu Certo');
-        })
-        promise.catch(erro => console.log('Erro: ' + erro));
+        const certain = window.confirm('Você quer mesmo deletar esse hábito?');
+        if (certain){
+            const promise = axios.delete(URL, config);
+            promise.then(response => {
+                setHabitList([...habitList].filter(habit => habit.id !== id));
+            })
+            promise.catch(erro => alert(erro));
+        }
     }
 
 
@@ -128,7 +127,9 @@ export default function HabitsScreen(){
                     <button className="cancel" onClick={() => setAddNewHabit(false)}>Cancelar</button>
                     <button onClick={createNewHabit} className="save">Salvar</button>
                 </NewHabit>
-                {showHabits()}
+                <Habits>
+                    {showHabits()}
+                </Habits>
             <Footer />
         </HabitsPage>
     ):(
@@ -138,7 +139,9 @@ export default function HabitsScreen(){
                     <h2>Meus hábitos</h2>
                     <ion-icon onClick={() => setAddNewHabit(true)} name="duplicate"></ion-icon>
                 </Title>
-                {showHabits()}
+                <Habits>
+                    {showHabits()}
+                </Habits>
             <Footer />
         </HabitsPage>
     )
@@ -166,13 +169,14 @@ const Title = styled.article`
 `
 
 const HabitsPage = styled.section`
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     background-color: #F2F2F2;
     display:flex;
     flex-direction: column;
     align-items: center;
     font-family: 'Lexend Deca', sans-serif;
+    
 
     p{
         padding: 18px;
@@ -181,8 +185,12 @@ const HabitsPage = styled.section`
     }
 `
 
+const Habits = styled.div`
+    padding-bottom: 100px;
+`
+
 const NewHabit = styled.article`
-    height: 180px;
+    min-height: 180px;
     width: 340px;
     background: #FFFFFF;
     border-radius: 5px;
