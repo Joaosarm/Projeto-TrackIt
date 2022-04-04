@@ -1,2 +1,2 @@
 # DEPLOY
-projeto-track-gkz6vdt5a-joaosarm.vercel.app
+https://projeto-track-it-blush.vercel.app/
