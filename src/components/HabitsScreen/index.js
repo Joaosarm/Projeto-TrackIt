@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
+import { FallingLines, Rings } from  'react-loader-spinner';
 
 import UserContext from "../../contexts/UserContext";
 import Header from "../Header";
@@ -12,6 +13,8 @@ export default function HabitsScreen(){
     const daysButton = ['D','S','T','Q','Q','S','S','D'];
     const [selectedDays, setSelectedDays] = useState([]);
     const [habitName, setHabitName] = useState('');
+    const [disable, setDisable] = useState(false);
+    
 
     const {token} = useContext(UserContext);
 
@@ -57,10 +60,32 @@ export default function HabitsScreen(){
         )
     }
 
+    function NewHabitInput(){
+        return disable ? (
+        <NewHabit disabled = {disable}>
+            <input disabled type='text' placeholder='nome do hábito' value={habitName} onChange={(e) => setHabitName(e.target.value)}/>
+            <Days>
+                {daysButton.map((day, index) => buttons(day, index))}
+            </Days>
+            <button disabled className="cancel" onClick={() => setAddNewHabit(false)}>Cancelar</button>
+            <button disabled onClick={createNewHabit} className="save"><Rings color="#FFFFFF"  width={20} /><Rings color="#FFFFFF"  width={20} /><Rings color="#FFFFFF"  width={20} /></button>
+        </NewHabit>
+        ):(
+            <NewHabit >
+            <input  type='text' placeholder='nome do hábito' value={habitName} onChange={(e) => setHabitName(e.target.value)}/>
+            <Days>
+                {daysButton.map((day, index) => buttons(day, index))}
+            </Days>
+            <button className="cancel" onClick={() => setAddNewHabit(false)}>Cancelar</button>
+            <button onClick={createNewHabit} className="save">Salvar</button>
+        </NewHabit>
+        )
+    }
+
     function buttons(day, index){
         const selected = selectedDays.some(day => day === index);
         return(
-            <DayButton key={index} selected={selected} onClick={() => toggleDay(index)}>{day}</DayButton>
+            <DayButton disabled = {disable ? "disabled" : ""} key={index} selected={selected} onClick={() => toggleDay(index)}>{day}</DayButton>
         )
     }
 
@@ -75,12 +100,22 @@ export default function HabitsScreen(){
     }
 
     function createNewHabit(){
+        setDisable(true);
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         };
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits';
+        if(habitName === '') {
+            alert('Faltou escrever o hábito!!');
+            setDisable(false);
+        }
+        else if(selectedDays.length===0) {
+            alert('Faltou selecionar os dias!!');
+            setDisable(false);
+        }
+        else{
         const promise = axios.post(URL,{
             name: habitName,
             days: selectedDays
@@ -89,9 +124,14 @@ export default function HabitsScreen(){
             const {data} = response;
             setHabitList([...habitList, data]);
             setHabitName('');
+            setDisable(false);
             setAddNewHabit(false);
+            setSelectedDays([]);
         })
-        promise.catch(erro => alert(erro));
+        promise.catch(erro =>{ 
+            alert(erro);
+            setDisable(false);
+        });}
     }
 
     function deleteHabit(id){
@@ -119,14 +159,7 @@ export default function HabitsScreen(){
                     <h2>Meus hábitos</h2>
                     <ion-icon  name="duplicate"></ion-icon>
                 </Title>
-                <NewHabit>
-                    <input type='text' placeholder='nome do hábito' value={habitName} onChange={(e) => setHabitName(e.target.value)}/>
-                    <Days>
-                        {daysButton.map((day, index) => buttons(day, index))}
-                    </Days>
-                    <button className="cancel" onClick={() => setAddNewHabit(false)}>Cancelar</button>
-                    <button onClick={createNewHabit} className="save">Salvar</button>
-                </NewHabit>
+                {NewHabitInput()}
                 <Habits>
                     {showHabits()}
                 </Habits>
@@ -211,11 +244,18 @@ const NewHabit = styled.article`
         border: 1px solid #D5D5D5;
         box-sizing: border-box;
         border-radius: 5px;
+        opacity: ${props => props.disabled ? '0.7' : '1'};
     }
 
     button{
         font-size: 19px;
+        display: flex;
+        height: 35px;
+        width: 84px;
+        align-items: center;
+        justify-content: center;
         font-family: 'Lexend Deca', sans-serif;
+        opacity: ${props => props.disabled ? '0.7' : '1'};
     }
 
     .cancel{
@@ -259,18 +299,19 @@ const DayButton = styled.button`
 `
 
 const Habit = styled.article`
-    height: 75px;
-    width: 310px;
+    height: auto;
+    width: 295px;
     background: #FFFFFF;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     position: relative;
     margin-top: 3px;
-    padding: 13px 15px;
+    padding: 13px 30px 13px 15px;
     font-size: 19px;
 
     h3{
+        overflow: hidden;
         color: #666666;
         margin-bottom: 6px;
         margin-top: 2px;

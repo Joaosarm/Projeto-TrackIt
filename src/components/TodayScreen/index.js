@@ -42,7 +42,9 @@ export default function TodayScreen(){
                     return(
                     <Habit key={index} >
                         <div>
-                            <h4>{habit.name}</h4>
+                            <div className="titulo">
+                                <h4>{habit.name}</h4>
+                            </div>
                             <p>Sequência atual:<font color='#8FC549'>  {habit.currentSequence} dias </font></p>
                             <p>Seu recorde: <font color='#8FC549'>  {habit.highestSequence} dias </font></p>
                         </div>
@@ -52,7 +54,9 @@ export default function TodayScreen(){
                     return (
                     <Habit key={index} >
                         <div>
-                            <h4>{habit.name}</h4>
+                            <div className="titulo">
+                                <h4>{habit.name}</h4>
+                            </div>
                             <p>Sequência atual: <font color='#666666'>  {habit.currentSequence} </font> dias</p>
                             <p>Seu recorde: <font color='#666666'>  {habit.highestSequence} dias </font></p>
                         </div>
@@ -164,7 +168,7 @@ const Today = styled.section`
 `
 
 const Habit = styled.article`
-    height: 68px;
+    height: auto;
     width: 314px;
     background: #FFFFFF;
     border-radius: 5px;
@@ -175,7 +179,12 @@ const Habit = styled.article`
     position: relative;
     align-items: center;
     margin-bottom: 10px;
-
+    
+    .titulo{
+        overflow: hidden;
+        width: 240px;
+    }
+    
     h4{
         font-size: 20px;
         margin-bottom: 10px;
