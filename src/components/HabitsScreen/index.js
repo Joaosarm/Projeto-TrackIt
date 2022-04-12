@@ -159,7 +159,7 @@ export default function HabitsScreen(){
                     <h2>Meus hábitos</h2>
                     <ion-icon  name="duplicate"></ion-icon>
                 </Title>
-                {NewHabitInput()}
+                    {NewHabitInput()}
                 <Habits>
                     {showHabits()}
                 </Habits>
@@ -251,7 +251,7 @@ const NewHabit = styled.article`
         font-size: 19px;
         display: flex;
         height: 35px;
-        width: 84px;
+        max-width: 84px;
         align-items: center;
         justify-content: center;
         font-family: 'Lexend Deca', sans-serif;
@@ -292,7 +292,6 @@ const DayButton = styled.button`
     border: 1px solid #D5D5D5;
     box-sizing: border-box;
     border-radius: 5px;
-    width: 30px;
     height: 30px;  
     background: ${props => props.selected ? '#DBDBDB' : '#FFFFFF'};
     color: ${props => props.selected ? '#FFFFFF' : '#DBDBDB'};
